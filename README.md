@@ -35,8 +35,7 @@ No | Description
 5.3 | **.setReleaseMode(boolean releaseMode)**  <br/> Sets Pollfish SDK to Developer or Release mode
 
 
-<br/>
-### 2.1 .setAPIKey(String apiKey)
+#### 2.1 .setAPIKey(String apiKey)
 
 Pollfish API Key as provided by Pollfish on  Pollfish Dashboard. If you did not specify the API Key in AdMob's UI as desribed in step 2. If you have already specified Pollfish API Key on AdMob's UI, this param will be ignored.
 
