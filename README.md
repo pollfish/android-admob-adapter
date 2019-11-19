@@ -26,6 +26,7 @@ Pollfish AdMob Adapter provides different options that you can use to control th
 
 <br/>
 Below you can see all the available options of **PollfishExtrasBundleBuilder** instance that is used to configure the behaviour of Pollfish SDK.
+
 <br/>
 
 No | Description
