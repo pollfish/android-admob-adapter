@@ -40,7 +40,7 @@ No | Description
 
 #### 2.1 .setAPIKey(String apiKey)
 
-Pollfish API Key as provided by Pollfish on  Pollfish Dashboard. If you did not specify the API Key in AdMob's UI as desribed in step 2. If you have already specified Pollfish API Key on AdMob's UI, this param will be ignored.
+Pollfish API Key as provided by Pollfish on  [Pollfish Dashboard](https://www.pollfish.com/publisher/) after you sign up to the platform.  If you have already specified Pollfish API Key on AdMob's UI, this param will be ignored.
 
 #### 2.2 .setRequestUUID(String requestUUID)
 
