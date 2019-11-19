@@ -54,7 +54,7 @@ If you would like to read more on Pollfish s2s cllab
 
 Sets Pollfish SDK to Developer or Release mode.
 
-   **Developer mode** is used to show to the developer how Pollfish surveys will be shown through an app (useful during development and testing).
+*   **Developer mode** is used to show to the developer how Pollfish surveys will be shown through an app (useful during development and testing).
 *   **Release mode** is the mode to be used for a released app in any app store (start receiving paid surveys).
 
 Pollfish AdMob Adapter runs Pollfish SDK in release mode by default. If you would like to test with Test survey, you should set release mode to fasle.
