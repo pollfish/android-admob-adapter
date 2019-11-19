@@ -58,7 +58,7 @@ Sets Pollfish SDK to Developer or Release mode.
 Pollfish AdMob Adapter runs Pollfish SDK in release mode by default. If you would like to test with Test survey, you should set release mode to fasle.
 ```
 Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
-    .setAPIKey(""YOUR_POLLFISH_API_KEY")
+    .setAPIKey("YOUR_POLLFISH_API_KEY")
     .setReleaseMode(false)
     .setRequestUUID("MY_ID")
     .build();
