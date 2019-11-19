@@ -1,0 +1,2 @@
+include ':app', ':pollfish-admob'
+rootProject.name='SampleProject'

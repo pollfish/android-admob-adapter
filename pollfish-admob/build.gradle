@@ -1,0 +1,87 @@
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'pollfish'
+
+    publishedGroupId = 'com.pollfish.mediation'
+    libraryName = 'pollfish-admob'
+    artifact = 'pollfish-admob'
+
+    libraryDescription = 'Adapter for showing Pollfish surveys within mobile apps through AdMob mediation'
+
+    siteUrl = 'https://github.com/pollfish/android-admob-adapter'
+    gitUrl = 'https://github.com/pollfish/android-admob-adapter.git'
+
+    libraryVersion = '5.0.2.1'
+
+    developerId = 'pollfish'
+    developerName = 'Pollfish Inc.'
+    developerEmail = 'support@pollfish.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+    configurations = ['archives']
+}
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "5.0.2.1"
+        
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${archivesBaseName}-${defaultConfig.versionName}.aar"
+        }
+    }
+
+    // build a jar with source files
+    task sourcesJarBuild(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadocBuild(type: Javadoc) {
+        failOnError false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += configurations.compile
+    }
+    // build a jar with javadoc
+    task javadocJarBuild(type: Jar, dependsOn: javadocBuild) {
+        classifier = 'javadocBuild'
+        from javadocBuild.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJarBuild
+        archives javadocJarBuild
+    }
+
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+
+}
+
+dependencies {
+    api 'com.google.android.gms:play-services-ads:18.2.0'
+    api 'com.pollfish:pollfish:5.0.2:googleplayRelease@aar'
+}

@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "5.0.2.1"
+        
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${archivesBaseName}-${defaultConfig.versionName}.aar"
+        }
+    }
+
+    // build a jar with source files
+    task sourcesJarBuild(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadocBuild(type: Javadoc) {
+        failOnError false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += configurations.compile
+    }
+    // build a jar with javadoc
+    task javadocJarBuild(type: Jar, dependsOn: javadocBuild) {
+        classifier = 'javadocBuild'
+        from javadocBuild.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJarBuild
+        archives javadocJarBuild
+    }
+}
+
+dependencies {
+    api 'com.google.android.gms:play-services-ads:18.2.0'
+    api 'com.pollfish:pollfish:5.0.2:googleplayRelease@aar'
+}
