@@ -1,6 +1,6 @@
 # Pollfish Android AdMob Mediation Adapter
 
-AdMob mediation adapter for android apps looking to load and show Rewarded Surveys from Pollfish in the same waterfall with other Rewarded Ads.
+AdMob Mediation Adapter for Android apps looking to load and show Rewarded Surveys from Pollfish in the same waterfall with other Rewarded Ads.
 
 ### Step 1: Add Pollfish AdMob Adapter to your project
 
