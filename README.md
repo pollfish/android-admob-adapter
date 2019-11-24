@@ -6,7 +6,7 @@ AdMob Mediation Adapter for Android apps looking to load and show Rewarded Surve
 
 ### Step 1: Add Pollfish AdMob Adapter to your project
 
-Import Pollfish AdMob adater **.AAR** file as it can be found in the **pollfish-admob-aar** folder, to your project libraries  
+Import Pollfish AdMob adapter **.AAR** file as it can be found in the **pollfish-admob-aar** folder, to your project libraries  
 
 If you are using Android Studio, right click on your project and select New Module. Then select Import .JAR or .AAR Package option and from the file browser locate Pollfish aar file. Right click again on your project and in the Module Dependencies tab choose to add Pollfish module that you recently added, as a dependency.
 
