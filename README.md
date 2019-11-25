@@ -8,7 +8,7 @@ AdMob Mediation Adapter for Android apps looking to load and show Rewarded Surve
 
 Import Pollfish AdMob adapter **.AAR** file as it can be found in the **pollfish-admob-aar** folder, to your project libraries  
 
-If you are using Android Studio, right click on your project and select New Module. Then select Import .JAR or .AAR Package option and from the file browser locate Pollfish aar file. Right click again on your project and in the Module Dependencies tab choose to add Pollfish module that you recently added, as a dependency.
+If you are using Android Studio, right click on your project and select New Module. Then select Import .JAR or .AAR Package option and from the file browser locate Pollfish AdMob Adapter aar file. Right click again on your project and in the Module Dependencies tab choose to add Pollfish module that you recently added, as a dependency.
 
 **OR**
 
@@ -33,7 +33,7 @@ Below you can see all the available options of **PollfishExtrasBundleBuilder** i
 
 No | Description
 ------------ | -------------
-5.1 | **.setAPIKey(String apiKey)**  <br/> Sets Pollfish SDK API key as provided on Pollfish
+5.1 | **.setAPIKey(String apiKey)**  <br/> Sets Pollfish SDK API key as provided by Pollfish
 5.2 | **.setRequestUUID(String requestUUID)**  <br/> Sets a unique id to identify a user and be passed through server-to-server callbacks
 5.3 | **.setReleaseMode(boolean releaseMode)**  <br/> Sets Pollfish SDK to Developer or Release mode
 
@@ -66,7 +66,6 @@ Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
     .build();
 
 AdRequest request = new AdRequest.Builder()
-                .addTestDevice("xxxxx-xxxx-xxxxxxx")
                 .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle)
                 .build();
 ```
@@ -75,4 +74,7 @@ AdRequest request = new AdRequest.Builder()
 
 If you everything worked fine during the previous steps, you should turn Pollfish to release mode and publish your app.
 
+> **Note:** After you take your app live, you should request your account to get verified through Pollfish Dashboard in the App Settings area.
+
+> **Note:** There is an option to show **Standalone Demographic Questions** needed for Pollfish to target users with surveys even when no actually surveys are available. Those surveys do not deliver any revenue to the publisher (but they can increase fill rate) and therefore if you do not want to show such surveys in the Waterfall you should visit your **App Settings** are and disable that option.
 
