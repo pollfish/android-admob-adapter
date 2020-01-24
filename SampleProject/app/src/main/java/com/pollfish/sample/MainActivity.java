@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,16 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private String adMobKey="ADMOB_AD_UNIT_KEY";
     private String pollfishAPIKey="POLLFISH_API_KEY";
     private String adMobTestDevice="ADMOB_TEST_DEVICE_ID";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-
-
-        MediationTestSuite.launch(MainActivity.this);
+        //MediationTestSuite.launch(MainActivity.this);
 
         rewardedAdBtn = findViewById(R.id.rewardedAdBtn);
 
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 createAndLoadRewardedAd();
             }
         });
-
 
         rewardedAdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
                 .setAPIKey(pollfishAPIKey)
-                .setReleaseMode(true)
+                .setReleaseMode(false)
                 .setRequestUUID("MY_ID")
                 .build();
 

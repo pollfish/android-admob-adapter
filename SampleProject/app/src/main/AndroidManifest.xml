@@ -10,11 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        //TODO: Replace with your own key
+        <!--TODO: Replace with your own key-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ADMOB_APP_KEY"/>
+
 
         <activity android:name=".MainActivity">
             <intent-filter>

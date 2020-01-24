@@ -13,9 +13,10 @@ public class PollfishExtrasBundleBuilder {   // Keys to add and obtain the extra
 
     private static final String TAG = "ExtrasBundleBuilder'";
 
-    static final String POLLFISH_API_KEY = "apiKey";
-    static final String POLLFISH_MODE = "releaseMode";
-    static final String POLLFISH_REQUEST_UUID = "requestUUID";
+    static final String POLLFISH_API_KEY = "api_key";
+    static final String POLLFISH_MODE = "release_mode";
+    static final String POLLFISH_REQUEST_UUID = "request_uuid";
+    static final String POLLFISH_INTEGRATION_TYPE = "offerwall_mode";
 
     /**
      * An extra value used to populate the api key property of Pollfish SDK
@@ -33,6 +34,12 @@ public class PollfishExtrasBundleBuilder {   // Keys to add and obtain the extra
      */
     private String requestUUID;
 
+    /**
+     * An extra value used to populate the "offerwall mode" property of Pollfish SDK
+     */
+    private boolean offerwallMode;
+
+
     public PollfishExtrasBundleBuilder setAPIKey(
             String apiKey) {
 
@@ -44,6 +51,12 @@ public class PollfishExtrasBundleBuilder {   // Keys to add and obtain the extra
     public PollfishExtrasBundleBuilder setReleaseMode(boolean releaseMode) {
         if (PollfishAdMobAdapterConstants.DEBUGMODE)  Log.d(TAG, "setReleaseMode: " + releaseMode);
         this.releaseMode = releaseMode;
+        return PollfishExtrasBundleBuilder.this;
+    }
+
+    public PollfishExtrasBundleBuilder setOfferwallMode(boolean offerwallMode) {
+        if (PollfishAdMobAdapterConstants.DEBUGMODE)  Log.d(TAG, "setOfferwallMode: " + offerwallMode);
+        this.offerwallMode = offerwallMode;
         return PollfishExtrasBundleBuilder.this;
     }
 
@@ -61,7 +74,8 @@ public class PollfishExtrasBundleBuilder {   // Keys to add and obtain the extra
 
         extras.putString(POLLFISH_API_KEY, apiKey);
         extras.putBoolean(POLLFISH_MODE, releaseMode);
-        extras.putString(POLLFISH_REQUEST_UUID, apiKey);
+        extras.putString(POLLFISH_REQUEST_UUID, requestUUID);
+        extras.putBoolean(POLLFISH_INTEGRATION_TYPE, offerwallMode);
 
         return extras;
     }

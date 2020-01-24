@@ -29,6 +29,8 @@ import com.pollfish.interfaces.PollfishUserNotEligibleListener;
 import com.pollfish.interfaces.PollfishUserRejectedSurveyListener;
 import com.pollfish.main.PollFish;
 
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -59,18 +61,25 @@ public class PollfishAdMobAdapter extends Adapter implements
     /**
      * Pollfish release mode
      */
-    private boolean releaseMode;
+    private boolean releaseMode =true;
 
     /**
      * Pollfish Request UUID
      */
     private String requestUUID;
 
+    /**
+     * Pollfish Offerwall mode
+     */
+    private boolean offerwallMode = false;
+
 
     /**
      * WeakReference of context to avoid memory leaks
      */
     private WeakReference<Context> contextWeakRef;
+
+    private static boolean pollfishPanelOpen = false;
 
 
     @Override
@@ -96,6 +105,17 @@ public class PollfishAdMobAdapter extends Adapter implements
         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd()");
 
         setContext(mediationRewardedAdConfiguration.getContext());
+        mMediationAdLoadCallback = mediationAdLoadCallback;
+
+        if(pollfishPanelOpen){
+
+            if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "Pollfish Survey Panel already visible");
+
+            if (mMediationAdLoadCallback != null) {
+                mMediationAdLoadCallback.onFailure("Pollfish Survey Panel already visible");
+            }
+            return;
+        }
 
         if (!(getContext() instanceof Activity)) {
             mediationAdLoadCallback.onFailure("Context is not an Activity. Pollfish requires an Activity context to load surveys.");
@@ -111,22 +131,68 @@ public class PollfishAdMobAdapter extends Adapter implements
         if (networkExtras != null) {
 
             pollfishAPIKey = networkExtras.getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY);
-            releaseMode = networkExtras.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE, false);
+            releaseMode = networkExtras.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE, true);
             requestUUID = networkExtras.getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID);
+            offerwallMode= networkExtras.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE,false);
 
             if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd() networkExtras key: " + pollfishAPIKey);
             if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd() networkExtras mode: " + releaseMode);
             if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd() networkExtras requestUUID: " + requestUUID);
+            if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd() networkExtras offerwallMode: " + offerwallMode);
         }
 
         if (serverParameters != null) {
 
             try {
-                String pollfishAPIKeyTmp = serverParameters.getString("parameter");
+                String jsonParams = serverParameters.getString("parameter");
 
-                if(pollfishAPIKeyTmp!=null) {
-                    pollfishAPIKey = pollfishAPIKeyTmp;
+                try {
+
+                    JSONObject jsonObject = new JSONObject(jsonParams);
+
+                    if(jsonObject!=null) {
+
+                        Log.d(TAG, "Pollfish jsonParams: " + jsonObject.toString());
+
+                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_API_KEY)) {
+                            //Checking address Key Present or not
+                            pollfishAPIKey = jsonObject .getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY); // Present Key
+
+                            if (PollfishAdMobAdapterConstants.DEBUGMODE)
+                                Log.d(TAG, "Pollfish API Key from AdMob UI: " + pollfishAPIKey);
+                        }
+
+                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID)) {
+
+                            requestUUID = jsonObject .getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID); // Present Key
+
+                            if (PollfishAdMobAdapterConstants.DEBUGMODE)
+                                Log.d(TAG, "Pollfish requestUUID from AdMob UI: " + requestUUID);
+                        }
+
+
+                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE)) {
+
+                            offerwallMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE); // Present Key
+
+                            if (PollfishAdMobAdapterConstants.DEBUGMODE)
+                                Log.d(TAG, "Pollfish offerwallMode from AdMob UI: " + offerwallMode);
+                        }
+
+                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_MODE)) {
+
+                            releaseMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE); // Present Key
+
+                            if (PollfishAdMobAdapterConstants.DEBUGMODE)
+                                Log.d(TAG, "Pollfish releaseMode from AdMob UI: " + releaseMode);
+                        }
+
+                    }
+
+                } catch (Throwable t) {
+                    Log.e(TAG,"Could not parse malformed JSON: " + jsonParams);
                 }
+
             } catch (Exception e) {
                 if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.e(TAG, "loadRewardedAd() exception: " + e);
 
@@ -141,9 +207,7 @@ public class PollfishAdMobAdapter extends Adapter implements
 
         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "pollfishAPIKey(): " + pollfishAPIKey);
 
-        mMediationAdLoadCallback = mediationAdLoadCallback;
-
-        final ViewGroup viewGroup =(ViewGroup) ((Activity) getContext()).getWindow().getDecorView().getRootView();
+        pollfishPanelOpen = false;
 
         PollFish.initWith((Activity) getContext(), new PollFish.ParamsBuilder(pollfishAPIKey)
                 .rewardMode(false)
@@ -174,6 +238,7 @@ public class PollfishAdMobAdapter extends Adapter implements
                         if (mMediationAdLoadCallback != null) {
                             mMediationRewardedAdCallback.onAdFailedToShow("onUserRejectedSurvey");
                         }
+
                     }
                 })
                 .pollfishSurveyNotAvailableListener(new PollfishSurveyNotAvailableListener() {
@@ -185,6 +250,8 @@ public class PollfishAdMobAdapter extends Adapter implements
                         if (mMediationAdLoadCallback != null) {
                             mMediationAdLoadCallback.onFailure("Pollfish Surveys Not Available");
                         }
+
+                        pollfishPanelOpen = false;
 
                     }
                 })
@@ -200,6 +267,8 @@ public class PollfishAdMobAdapter extends Adapter implements
                                     mMediationRewardedAdCallback.onVideoStart();
                                     mMediationRewardedAdCallback.reportAdImpression();
                                 }
+
+                                pollfishPanelOpen = true;
                             }
                         }
                 )
@@ -210,22 +279,11 @@ public class PollfishAdMobAdapter extends Adapter implements
 
                                 if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "onPollfishClosed");
 
-                                postRunnableInMainThread(getContext(), new Runnable() {
-                                            @Override
-                                            public void run() {
+                                if (mMediationRewardedAdCallback != null) {
+                                    mMediationRewardedAdCallback.onAdClosed();
+                                }
 
-                                                // We need to re-activate video/sound and other JS WebView functionality that were paused
-
-                                                if(viewGroup!=null){
-                                                    activateJSinView(viewGroup);
-                                                }
-
-                                                if (mMediationRewardedAdCallback != null) {
-                                                    mMediationRewardedAdCallback.onAdClosed();
-                                                }
-                                            }
-                                        }, 400
-                                );
+                                pollfishPanelOpen = false;
                             }
                         })
 
@@ -256,6 +314,7 @@ public class PollfishAdMobAdapter extends Adapter implements
                     }
                 })
                 .rewardMode(true)
+                .offerWallMode(offerwallMode)
                 .build());
     }
 
@@ -331,31 +390,6 @@ public class PollfishAdMobAdapter extends Adapter implements
         } catch (Exception e) {
 
             if (PollfishAdMobAdapterConstants.DEBUGMODE)  Log.e(TAG, "postRunnableInMainThread:" + e);
-        }
-    }
-
-    private void activateJSinView(ViewGroup parent) {
-
-        if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "Activate back JS in WebView");
-
-        for (int i = 0; i < parent.getChildCount(); i++) {
-
-            View child = parent.getChildAt(i);
-
-            if ((child!=null) && (child instanceof WebView)) {
-
-                WebView childWebView = (WebView) child;
-
-                if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "Found WebView - Activating JS back");
-
-                childWebView.resumeTimers();
-                childWebView.onResume();
-            }
-
-            if ((child!=null) && (child instanceof ViewGroup)) {
-
-                activateJSinView((ViewGroup) child);
-            }
         }
     }
 
