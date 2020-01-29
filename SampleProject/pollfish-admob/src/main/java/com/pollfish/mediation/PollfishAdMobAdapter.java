@@ -235,8 +235,8 @@ public class PollfishAdMobAdapter extends Adapter implements
                     public void onUserRejectedSurvey() {
                         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "onUserRejectedSurvey");
 
-                        if (mMediationAdLoadCallback != null) {
-                            mMediationRewardedAdCallback.onAdFailedToShow("onUserRejectedSurvey");
+                        if (mMediationRewardedAdCallback != null) {
+                            mMediationRewardedAdCallback.onAdClosed();
                         }
 
                     }
