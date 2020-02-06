@@ -328,7 +328,7 @@ public class PollfishAdMobAdapter extends Adapter implements
             mMediationRewardedAdCallback.reportAdClicked();
         }
 
-        PollFish.show();
+        PollFish.show((Activity) context);
     }
 
 
