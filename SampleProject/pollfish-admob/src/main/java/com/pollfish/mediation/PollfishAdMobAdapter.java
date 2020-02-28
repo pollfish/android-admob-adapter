@@ -210,7 +210,6 @@ public class PollfishAdMobAdapter extends Adapter implements
         pollfishPanelOpen = false;
 
         PollFish.initWith((Activity) getContext(), new PollFish.ParamsBuilder(pollfishAPIKey)
-                .rewardMode(false)
                 .releaseMode(releaseMode)
                 .requestUUID(requestUUID)
 
@@ -235,9 +234,9 @@ public class PollfishAdMobAdapter extends Adapter implements
                     public void onUserRejectedSurvey() {
                         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "onUserRejectedSurvey");
 
-                        if (mMediationRewardedAdCallback != null) {
+                        /*if (mMediationRewardedAdCallback != null) {
                             mMediationRewardedAdCallback.onAdClosed();
-                        }
+                        }*/
 
                     }
                 })
@@ -293,9 +292,9 @@ public class PollfishAdMobAdapter extends Adapter implements
 
                         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "onUserNotEligible");
 
-                        if (mMediationRewardedAdCallback != null) {
+                        /*if (mMediationRewardedAdCallback != null) {
                             mMediationRewardedAdCallback.onAdClosed();
-                        }
+                        }*/
 
                     }
                 })
