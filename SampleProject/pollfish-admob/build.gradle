@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 10
-        versionName "5.5.1.0"
+        versionCode 11
+        versionName '5.6.0.1'
         
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -20,6 +20,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    task prepareKotlinBuildScriptModel {
+
     }
 
     libraryVariants.all { variant ->
@@ -54,5 +58,5 @@ android {
 
 dependencies {
     api 'com.google.android.gms:play-services-ads:18.2.0'
-    api 'com.pollfish:pollfish:5.5.1:googleplayRelease@aar'
+    api 'com.pollfish:pollfish:5.6.0:googleplayRelease@aar'
 }
