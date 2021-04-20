@@ -2,6 +2,7 @@ package com.pollfish.mediation;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -83,6 +84,11 @@ public class PollfishAdMobAdapter extends Adapter implements
                                @NotNull MediationAdLoadCallback<MediationRewardedAd,
                                        MediationRewardedAdCallback> mediationAdLoadCallback) {
         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd()");
+
+        if (Build.VERSION.SDK_INT < 21) {
+            mediationAdLoadCallback.onFailure("Pollfish can't run on Android SDK 20 or lower");
+            return;
+        }
 
         setContext(mediationRewardedAdConfiguration.getContext());
 
@@ -249,6 +255,11 @@ public class PollfishAdMobAdapter extends Adapter implements
 
     @Override
     public void showAd(@NotNull Context context) {
+        if (Build.VERSION.SDK_INT < 21) {
+            mMediationRewardedAdCallback.onAdFailedToShow("Pollfish can't run on Android SDK 20 or lower");
+            return;
+        }
+
         if (PollfishAdMobAdapterConstants.DEBUGMODE)
             Log.d(TAG, "showAd()");
 

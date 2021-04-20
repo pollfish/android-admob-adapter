@@ -57,6 +57,10 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
     api 'com.google.android.gms:play-services-ads:20.0.0'
     api 'com.pollfish:pollfish-googleplay:6.0.2'
 }
+
+apply from: '../publish.gradle'

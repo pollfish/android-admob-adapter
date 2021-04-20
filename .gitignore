@@ -1,6 +1,5 @@
 # Built application files
 *.apk
-*.aar
 *.ap_
 *.aab
 
@@ -86,3 +85,6 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+keys/
+*.gpg
