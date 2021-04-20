@@ -1,0 +1,2 @@
+include ':example', ':pollfish-admob'
+rootProject.name='android-admob-adapter'

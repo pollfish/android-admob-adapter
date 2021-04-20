@@ -12,13 +12,13 @@ If you are using Android Studio, right click on your project and select New Modu
 
 **OR**
 
-#### **Retrieve Pollfish AdMob Adapter through jCenter()**
+#### **Retrieve Pollfish AdMob Adapter through maven()**
 
-Retrieve Pollfish through **jCenter()** with gradle by adding the following line in your project **build.gradle** (not the top level one, the one under 'app') in  dependencies section:  
+Retrieve Pollfish through **maven()** with gradle by adding the following line in your project **build.gradle** (not the top level one, the one under 'app') in  dependencies section:  
 
 ```
 dependencies {
-  implementation 'com.pollfish.mediation:pollfish-admob:5.6.0.1'
+  implementation 'com.pollfish.mediation:pollfish-admob:6.0.2.0'
 }
 ```
 

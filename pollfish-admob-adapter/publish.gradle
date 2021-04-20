@@ -1,0 +1,83 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+File secretPropsFile = project.rootProject.file('local.properties')
+Properties p = new Properties()
+new FileInputStream(secretPropsFile).withCloseable { is ->
+    p.load(is)
+}
+p.each { name, value ->
+    ext[name] = value
+}
+
+publishing {
+    publications {
+
+        release(MavenPublication) {
+
+            groupId "com.pollfish.mediation"
+            artifactId "pollfish-admob"
+            version android.defaultConfig.versionName
+
+            def filename = "pollfish-admob-${android.defaultConfig.versionName}"
+
+            artifact("$buildDir/outputs/aar/${filename}.aar")
+
+            pom {
+                name = "pollfish-admob"
+                description = "Adapter for showing Pollfish surveys within mobile apps through AdMob mediation"
+                url = "https://github.com/pollfish/android-admob-adapter"
+                packaging = "aar"
+
+                licenses {
+                    license {
+                        name = "The Apache Software License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "pollfish"
+                        name = "Pollfish Inc."
+                        email = "support@pollfish.com"
+                    }
+                }
+
+                scm {
+                    connection = "https://github.com/pollfish/android-admob-adapter.git"
+                    developerConnection = "https://github.com/pollfish/android-admob-adapter.git"
+                    url = "https://github.com/pollfish/android-admob-adapter"
+                }
+
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    project.configurations.implementation.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                        dependencyNode.appendNode('scope', 'compile')
+                    }
+
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}

@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 12
+        versionName '6.0.2.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${archivesBaseName}-${defaultConfig.versionName}.aar"
+        }
+    }
+
+    // build a jar with source files
+    task sourcesJarBuild(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadocBuild(type: Javadoc) {
+        failOnError false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += configurations.compile
+    }
+
+    // build a jar with javadoc
+    task javadocJarBuild(type: Jar, dependsOn: javadocBuild) {
+        classifier = 'javadocBuild'
+        from javadocBuild.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJarBuild
+        archives javadocJarBuild
+    }
+
+}
+
+dependencies {
+    api 'com.google.android.gms:play-services-ads:20.0.0'
+    api 'com.pollfish:pollfish-googleplay:6.0.2'
+}
