@@ -86,7 +86,8 @@ public class PollfishAdMobAdapter extends Adapter implements
         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "loadRewardedAd()");
 
         if (Build.VERSION.SDK_INT < 21) {
-            mediationAdLoadCallback.onFailure("Pollfish can't run on Android SDK 20 or lower");
+            Log.d(TAG, "Pollfish surveys will not run on targets lower than 21");
+            mediationAdLoadCallback.onFailure("Pollfish surveys will not run on targets lower than 21");
             return;
         }
 
