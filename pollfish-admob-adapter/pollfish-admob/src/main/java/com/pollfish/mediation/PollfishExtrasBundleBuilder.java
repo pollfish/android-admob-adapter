@@ -67,7 +67,6 @@ public class PollfishExtrasBundleBuilder {   // Keys to add and obtain the extra
     }
 
     public Bundle build() {
-
         if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "build()");
 
         Bundle extras = new Bundle();
