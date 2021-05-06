@@ -88,3 +88,5 @@ lint/tmp/
 
 keys/
 *.gpg
+
+.DS_Store
