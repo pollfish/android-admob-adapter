@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 15
-        versionName '6.1.0.0'
+        versionCode 16
+        versionName '6.1.1.0'
     }
 
     buildTypes {
@@ -60,7 +60,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     api 'com.google.android.gms:play-services-ads:20.0.0'
-    api 'com.pollfish:pollfish-googleplay:6.1.0'
+    api 'com.pollfish:pollfish-googleplay:6.1.1'
 }
 
 apply from: '../publish.gradle'
