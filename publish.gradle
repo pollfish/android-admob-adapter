@@ -10,6 +10,37 @@ p.each { name, value ->
     ext[name] = value
 }
 
+task prepareGoogleCloudDistDirs {
+    mkdir "$buildDir/tmp/dist/Pollfish MoPub Adapter Android-${android.defaultConfig.versionName}"
+}
+
+task packageGoogleCloudDistribution(type: Zip) {
+    archiveFileName = "Pollfish MoPub Adapter Anrdoid-${android.defaultConfig.versionName}"
+    destinationDirectory = file("$buildDir/dist/public")
+
+    from "$buildDir/tmp/dist/"
+}
+
+task copyDistToTempDirectory(type: Copy) {
+    from "$buildDir/outputs/aar/pollfish-mopub-${android.defaultConfig.versionName}"
+    into "$buildDir/tmp/dist/Pollfish MoPub Adapter Android-${android.defaultConfig.versionName}"
+}
+
+task deleteDistTempDirectories(type: Delete) {
+    delete "$buildDir/tmp/dist"
+}
+
+task packageDistributions {
+    dependsOn 'prepareGoogleCloudDirs'
+    dependsOn 'copyDistToTempDirectory'
+    dependsOn 'packageGoogleCloudDistribution'
+    dependsOn 'deleteDistTempDirectories'
+
+    tasks.findByName('copyDistToTempDirectory').mustRunAfter 'prepareGoogleCloudDirs'
+    tasks.findByName('packageGoogleCloudDistribution').mustRunAfter 'copyDistToTempDirectory'
+    tasks.findByName('deleteDistTempDirectories').mustRunAfter 'packageGoogleCloudDistribution'
+}
+
 publishing {
     publications {
 
