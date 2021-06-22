@@ -11,19 +11,19 @@ p.each { name, value ->
 }
 
 task prepareGoogleCloudDistDirs {
-    mkdir "$buildDir/tmp/dist/Pollfish MoPub Adapter Android-${android.defaultConfig.versionName}"
+    mkdir "$buildDir/tmp/dist/Pollfish Admob Adapter Android-${android.defaultConfig.versionName}"
 }
 
 task packageGoogleCloudDistribution(type: Zip) {
-    archiveFileName = "Pollfish MoPub Adapter Anrdoid-${android.defaultConfig.versionName}"
+    archiveFileName = "Pollfish Admob Adapter Anrdoid-${android.defaultConfig.versionName}.zip"
     destinationDirectory = file("$buildDir/dist/public")
 
     from "$buildDir/tmp/dist/"
 }
 
 task copyDistToTempDirectory(type: Copy) {
-    from "$buildDir/outputs/aar/pollfish-mopub-${android.defaultConfig.versionName}"
-    into "$buildDir/tmp/dist/Pollfish MoPub Adapter Android-${android.defaultConfig.versionName}"
+    from "$buildDir/outputs/aar/pollfish-admob-${android.defaultConfig.versionName}.aar"
+    into "$buildDir/tmp/dist/Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}"
 }
 
 task deleteDistTempDirectories(type: Delete) {
@@ -31,12 +31,12 @@ task deleteDistTempDirectories(type: Delete) {
 }
 
 task packageDistributions {
-    dependsOn 'prepareGoogleCloudDirs'
+    dependsOn 'prepareGoogleCloudDistDirs'
     dependsOn 'copyDistToTempDirectory'
     dependsOn 'packageGoogleCloudDistribution'
     dependsOn 'deleteDistTempDirectories'
 
-    tasks.findByName('copyDistToTempDirectory').mustRunAfter 'prepareGoogleCloudDirs'
+    tasks.findByName('copyDistToTempDirectory').mustRunAfter 'prepareGoogleCloudDistDirs'
     tasks.findByName('packageGoogleCloudDistribution').mustRunAfter 'copyDistToTempDirectory'
     tasks.findByName('deleteDistTempDirectories').mustRunAfter 'packageGoogleCloudDistribution'
 }
@@ -111,4 +111,11 @@ publishing {
 
 signing {
     sign publishing.publications
+}
+
+nexusStaging {
+    packageGroup "com.pollfish.mediation"
+    stagingProfileId = nexusStagingProfileId
+    username = ossrhUsername
+    password = ossrhPassword
 }

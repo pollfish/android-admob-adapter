@@ -66,7 +66,7 @@ if [ "$publish_only" = false ] ; then
 
     # Package public distribution .zip files
 
-    if ./gradlew :pollfish:packageDistributions then 
+    if ./gradlew :pollfish:packageDistributions; then
         echo "Packing Distributions succeeded"
     else
         echo "Packing Distributions failed"
@@ -88,14 +88,14 @@ if [ "$no_publish" = false ] ; then
         exit 1
     fi
 
-    for entry in pollfish/build/dist/public/*
+    for entry in pollfish-admob/build/dist/public/*
     do
         file_name="${entry##*/}"
         slashed_entry="${entry// /\\ }"
 
         # Upload public dist .zip files to Google Cloud Bucket
 
-        eval "gsutil cp ${slashed_entry} gs://pollfish_production/sdk/MoPub/"
+        eval "gsutil cp ${slashed_entry} gs://pollfish_production/sdk/AdMob/"
         if [ $? -eq 0 ]; then
             echo "Upload ${file_name} succeeded"
         else
@@ -107,10 +107,10 @@ if [ "$no_publish" = false ] ; then
         
         # Add Public Read Permission to Google Cloud objects
 
-        eval "gsutil acl ch -u AllUsers:R gs://pollfish_production/sdk/MoPub/${slashed_file_name}"
+        eval "gsutil acl ch -u AllUsers:R gs://pollfish_production/sdk/AdMob/${slashed_file_name}"
         if [ $? -eq 0 ]; then
             echo "${file_name} is now public"
-            echo "URL: https://storage.googleapis.com/pollfish_production/sdk/MoPub/${file_name// /%20}"
+            echo "URL: https://storage.googleapis.com/pollfish_production/sdk/AdMob/${file_name// /%20}"
         else
             echo "Failed to add public access permission to: ${file_name}"
             exit 1
