@@ -11,11 +11,11 @@ p.each { name, value ->
 }
 
 task prepareGoogleCloudDistDirs {
-    mkdir "$buildDir/tmp/dist/Pollfish Admob Adapter Android-${android.defaultConfig.versionName}"
+    mkdir "$buildDir/tmp/dist/Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}"
 }
 
 task packageGoogleCloudDistribution(type: Zip) {
-    archiveFileName = "Pollfish Admob Adapter Anrdoid-${android.defaultConfig.versionName}.zip"
+    archiveFileName = "Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}.zip"
     destinationDirectory = file("$buildDir/dist/public")
 
     from "$buildDir/tmp/dist/"

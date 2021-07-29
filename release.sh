@@ -14,22 +14,16 @@ while test $# -gt 0; do
             echo "--publish-only            execute only publishing tasks"
             echo "--no-publish              skip publishing tasks"
             echo "--keep-open               keep sonatype repository open and don't release"
-            echo "--no-upload               Do not upload to Google Play"
             exit 0
             ;;
         --no-publish*)
             shift
             no_publish=true
             keep_open=true
-            no_upload=true
             shift
             ;;
         --keep-open*)
             keep_open=true
-            shift
-            ;;
-        --no-upload*)
-            no_upload=true
             shift
             ;;
         --publish-only*)
