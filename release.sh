@@ -49,13 +49,13 @@ if [ "$publish_only" = false ] ; then
     if ./gradlew :pollfish-admob:build; then
         echo "Build task succeeded"
     else
-        echo "Build task failed. Retrying"
+        echo "Build task failed"
+    fi
 
-        if ./gradlew :pollfish-admob:build; then
-            echo "Build task succeeded"
-        else
-            echo "Build task failed."
-        fi
+    if ./gradlew :pollfish-admob:build; then
+        echo "Build task succeeded"
+    else
+        echo "Build task failed."
     fi
 
     # Package public distribution .zip files
