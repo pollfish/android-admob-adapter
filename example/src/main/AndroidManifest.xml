@@ -17,7 +17,8 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ADMOB_APP_KEY"/>
 
-        <activity android:name="com.pollfish.example.MainActivity">
+        <activity android:name="com.pollfish.example.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
