@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     //TODO: Replace with your own keys
-    private static final String AD_MOB_KEY = "ADMOB_AD_UNIT_KEY";
+    private static final String AD_MOB_AD_UNIT_KEY = "ADMOB_AD_UNIT_KEY";
     private static final String POLLFISH_API_KEY = "POLLFISH_API_KEY";
 
     private RewardedAd mRewardedAd;
@@ -42,29 +42,28 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onInitializationComplete()");
             createAndLoadRewardedAd();
         });
+    }
 
-        mRewardedAdButton.setOnClickListener(v -> {
+    public void onRewardedAdButtonClick(View view) {
+        Log.d(TAG, "rewardedAd.onClick()");
 
-            Log.d(TAG, "rewardedAd.onClick()");
+        if (mRewardedAd != null) {
 
-            if (mRewardedAd != null) {
+            mRewardedAd.show(MainActivity.this, reward -> {
+                Log.d(TAG, "onUserEarnedReward of Type: " + reward.getType() + " and amount:" + reward.getAmount());
 
-                mRewardedAd.show(MainActivity.this, reward -> {
-                    Log.d(TAG, "onUserEarnedReward of Type: " + reward.getType() + " and amount:" + reward.getAmount());
+                Toast.makeText(getApplicationContext(), "onUserEarnedReward of Type: " + reward.getType() + " and amount:" + reward.getAmount(), Toast.LENGTH_SHORT).show();
+            });
 
-                    Toast.makeText(getApplicationContext(), "onUserEarnedReward of Type: " + reward.getType() + " and amount:" + reward.getAmount(), Toast.LENGTH_SHORT).show();
-                });
-
-            } else {
-                Log.d(TAG, "The rewarded ad wasn't loaded yet.");
-            }
-        });
+        } else {
+            Log.d(TAG, "The rewarded ad wasn't loaded yet.");
+        }
     }
 
     public void createAndLoadRewardedAd() {
         Log.d(TAG, "createAndLoadRewardedAd()");
 
-        mRewardedAdButton.setVisibility(View.GONE);
+        mRewardedAdButton.setEnabled(false);
 
         Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
                 .setAPIKey(POLLFISH_API_KEY)
@@ -76,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
                 .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle)
                 .build();
 
-        RewardedAd.load(this, AD_MOB_KEY, request, new RewardedAdLoadCallback() {
+        RewardedAd.load(this, AD_MOB_AD_UNIT_KEY, request, new RewardedAdLoadCallback() {
 
             @Override
             public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                 mRewardedAd = rewardedAd;
 
-                mRewardedAdButton.setVisibility(View.VISIBLE);
+                mRewardedAdButton.setEnabled(true);
 
                 Toast.makeText(MainActivity.this, "onRewardedAdLoaded", Toast.LENGTH_SHORT).show();
 
@@ -119,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 Toast.makeText(getApplicationContext(), "onRewardedAdFailedToLoad errorCode:" + loadAdError.getMessage(), Toast.LENGTH_SHORT).show();
 
-                mRewardedAdButton.setVisibility(View.GONE);
-
+                mRewardedAdButton.setEnabled(false);
                 mRewardedAd = null;
             }
 
