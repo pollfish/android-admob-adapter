@@ -121,19 +121,19 @@ public class PollfishAdMobAdapter extends Adapter implements
 
                     if (jsonObject != null) {
                         if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_API_KEY)) {
-                            pollfishAPIKey = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY); // Present Key
+                            pollfishAPIKey = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY);
                         }
 
                         if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID)) {
-                            requestUUID = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID); // Present Key
+                            requestUUID = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID);
                         }
 
                         if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE)) {
-                            offerwallMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE); // Present Key
+                            offerwallMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE);
                         }
 
                         if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_MODE)) {
-                            releaseMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE); // Present Key
+                            releaseMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE);
                         }
                     }
                 } catch (Throwable t) {

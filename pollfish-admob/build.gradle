@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdk 16
         targetSdk 32
-        versionCode 22
-        versionName '6.2.3.0'
+        versionCode 23
+        versionName '6.2.4.1'
     }
 
     buildTypes {
@@ -32,7 +32,7 @@ android {
 
 dependencies {
     api 'com.google.android.gms:play-services-ads:20.6.0'
-    api 'com.pollfish:pollfish-googleplay:6.2.3'
+    api 'com.pollfish:pollfish-googleplay:6.2.4'
 }
 
 apply from: '../publish.gradle'

@@ -11,7 +11,7 @@ Download the following libraries
 * [Pollfish SDK](https://pollfish.com/docs/android/google-play)
 * [PollfishAdMobAdapter](https://pollfish.com/docs/android-admob-adapter)
 
-Import Pollfish AdMob Adapter and Pollfish SDK **.aar** libraries.  
+Import Pollfish AdMob Adapter and Pollfish SDK **.aar** libraries.
 
 If you are using Android Studio, right click on your project and select New Module. Then select Import .JAR or .AAR Package option and from the file browser locate Pollfish AdMob Adapter aar file. Right click again on your project and in the Module Dependencies tab choose to add Pollfish module that you recently added, as a dependency.
 
@@ -21,15 +21,31 @@ If you are using Android Studio, right click on your project and select New Modu
 
 Retrieve Pollfish through **maven()** with gradle by adding the following line in your project **build.gradle** (not the top level one, the one under 'app') in  dependencies section:  
 
-```
+```groovy
 dependencies {
-  implementation 'com.pollfish.mediation:pollfish-admob:6.2.3.0'
+  implementation 'com.pollfish.mediation:pollfish-admob:6.2.4.1'
 }
 ```
+
+<br/>
 
 ## Step 2: Request for a RewardedAd
 
 Import the following packages
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+```
+
+<span style="text-decoration:underline">Java</span>
 
 ```java
 import com.google.android.gms.ads.AdError;
@@ -142,10 +158,11 @@ if (mRewardedAd != null) {
 }
 ```
 
+<br/>
 
 ## Step 3: Configure Pollfish AdMob Adapter in your Rewarded Ad Unit 
 
-Pollfish AdMob Adapter provides different options that you can use to control the behaviour of Pollfish SDK.
+Pollfish AdMob Adapter provides different options that you can use to control the behaviour of Pollfish SDK. This configuration, if applied, will override any configuration done in AdMob's dashboard.
 
 <br/>
 
@@ -188,6 +205,7 @@ val bundle = PollfishExtrasBundleBuilder()
     .setAPIKey(POLLFISH_API_KEY)
     .setReleaseMode(false)
     .setRequestUUID("MY_UUID")
+    .setOfferwallMode(false)
     .build()
 
 val request = AdRequest.Builder()
@@ -202,12 +220,15 @@ Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
     .setAPIKey("YOUR_POLLFISH_API_KEY")
     .setReleaseMode(false)
     .setRequestUUID("MY_ID")
+    .setOfferwallMode(false)
     .build();
 
 AdRequest request = new AdRequest.Builder()
     .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle)
     .build();
 ```
+
+<br/>
 
 ### Step 3: Publish 
 
@@ -217,3 +238,12 @@ If you everything worked fine during the previous steps, you should turn Pollfis
 
 > **Note:** There is an option to show **Standalone Demographic Questions** needed for Pollfish to target users with surveys even when no actually surveys are available. Those surveys do not deliver any revenue to the publisher (but they can increase fill rate) and therefore if you do not want to show such surveys in the Waterfall you should visit your **App Settings** are and disable that option.
 
+<br/>
+
+# More info
+
+You can read more info on how the Pollfish SDKs work or how to get started with Google AdMob at the following links:
+
+[Pollfish Android SDK](https://pollfish.com/docs/android/google-play)
+
+[AdMob Android SDK](https://developers.google.com/admob/android/quick-start)
