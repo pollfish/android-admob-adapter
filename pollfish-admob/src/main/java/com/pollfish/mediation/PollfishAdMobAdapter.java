@@ -24,21 +24,13 @@ import com.pollfish.builder.Platform;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class PollfishAdMobAdapter extends Adapter implements
         MediationRewardedAd {
 
-    static final String TAG = "PollfishAdMobMediation";
-
+    private static final String TAG = "PollfishAdMobMediation";
     private static final String DOMAIN = "com.pollfish.mediation.PollfishAdMobAdapter";
-
-    private static final int ERROR_CODE_NOT_AVAILABLE = 0;
-    private static final int ERROR_CODE_LOW_TARGET = 1;
-    private static final int ERROR_CODE_PANEL_ALREADY_VISIBLE = 2;
-    private static final int ERROR_CODE_WRONG_CONTEXT = 3;
-    private static final int ERROR_CODE_EMPTY_API_KEY = 4;
 
     /**
      * Mediation rewarded video ad listener used to forward rewarded ad events
@@ -66,17 +58,11 @@ public class PollfishAdMobAdapter extends Adapter implements
      */
     private boolean offerwallMode = false;
 
-    /**
-     * WeakReference of context to avoid memory leaks
-     */
-    private WeakReference<Context> contextWeakRef;
-
     @Override
     public void initialize(@NotNull Context context,
                            @NotNull InitializationCompleteCallback initializationCompleteCallback,
                            @NotNull List<MediationConfiguration> mediationConfigurations) {
 
-        if (PollfishAdMobAdapterConstants.DEBUGMODE) Log.d(TAG, "initialize()");
 
         if (!(context instanceof Activity)) {
             initializationCompleteCallback.onInitializationFailed(
@@ -93,19 +79,29 @@ public class PollfishAdMobAdapter extends Adapter implements
                                        MediationRewardedAdCallback> mediationAdLoadCallback) {
         if (Build.VERSION.SDK_INT < 21) {
             Log.e(TAG, "Pollfish surveys will not run on targets lower than 21");
-            mediationAdLoadCallback.onFailure(new AdError(ERROR_CODE_LOW_TARGET, "Pollfish surveys will not run on targets lower than 21", DOMAIN));
+            mediationAdLoadCallback.onFailure(
+                    new AdError(
+                            PollfishAdMobAdapterConstants.ERROR_CODE_LOW_TARGET,
+                            "Pollfish surveys will not run on targets lower than 21",
+                            DOMAIN));
             return;
         }
-
-        setContext(mediationRewardedAdConfiguration.getContext());
 
         if (Pollfish.isPollfishPanelOpen()) {
-            mediationAdLoadCallback.onFailure(new AdError(ERROR_CODE_PANEL_ALREADY_VISIBLE, "Pollfish Survey Panel already visible", DOMAIN));
+            mediationAdLoadCallback.onFailure(
+                    new AdError(
+                            PollfishAdMobAdapterConstants.ERROR_CODE_PANEL_ALREADY_VISIBLE,
+                            "Pollfish Survey Panel already visible",
+                            DOMAIN));
             return;
         }
 
-        if (!(getContext() instanceof Activity)) {
-            mediationAdLoadCallback.onFailure(new AdError(ERROR_CODE_WRONG_CONTEXT, "Context is not an Activity. Pollfish requires an Activity context to load surveys.", DOMAIN));
+        if (!(mediationRewardedAdConfiguration.getContext() instanceof Activity)) {
+            mediationAdLoadCallback.onFailure(
+                    new AdError(
+                            PollfishAdMobAdapterConstants.ERROR_CODE_WRONG_CONTEXT,
+                            "Context is not an Activity. Pollfish requires an Activity context to load surveys.",
+                            DOMAIN));
             return;
         }
 
@@ -120,61 +116,63 @@ public class PollfishAdMobAdapter extends Adapter implements
                     JSONObject jsonObject = new JSONObject(jsonParams);
 
                     if (jsonObject != null) {
-                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_API_KEY)) {
-                            pollfishAPIKey = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY);
+                        if (jsonObject.has(PollfishAdMobAdapterConstants.POLLFISH_API_KEY)) {
+                            pollfishAPIKey = jsonObject.getString(PollfishAdMobAdapterConstants.POLLFISH_API_KEY);
                         }
 
-                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID)) {
-                            requestUUID = jsonObject.getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID);
+                        if (jsonObject.has(PollfishAdMobAdapterConstants.POLLFISH_REQUEST_UUID)) {
+                            requestUUID = jsonObject.getString(PollfishAdMobAdapterConstants.POLLFISH_REQUEST_UUID);
                         }
 
-                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE)) {
-                            offerwallMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE);
+                        if (jsonObject.has(PollfishAdMobAdapterConstants.POLLFISH_INTEGRATION_TYPE)) {
+                            offerwallMode = jsonObject.getBoolean(PollfishAdMobAdapterConstants.POLLFISH_INTEGRATION_TYPE);
                         }
 
-                        if (jsonObject.has(PollfishExtrasBundleBuilder.POLLFISH_MODE)) {
-                            releaseMode = jsonObject.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE);
+                        if (jsonObject.has(PollfishAdMobAdapterConstants.POLLFISH_MODE)) {
+                            releaseMode = jsonObject.getBoolean(PollfishAdMobAdapterConstants.POLLFISH_MODE);
                         }
                     }
                 } catch (Throwable t) {
                     Log.e(TAG, "Could not parse malformed JSON: " + jsonParams);
                 }
             } catch (Exception e) {
-                if (PollfishAdMobAdapterConstants.DEBUGMODE)
-                    Log.e(TAG, "loadRewardedAd() exception: " + e);
+                Log.e(TAG, "Error while extracting server parameters: " + e);
             }
         }
 
         if (networkExtras != null) {
-            if (networkExtras.containsKey(PollfishExtrasBundleBuilder.POLLFISH_API_KEY)) {
-                pollfishAPIKey = networkExtras.getString(PollfishExtrasBundleBuilder.POLLFISH_API_KEY);
+            if (networkExtras.containsKey(PollfishAdMobAdapterConstants.POLLFISH_API_KEY)) {
+                pollfishAPIKey = networkExtras.getString(PollfishAdMobAdapterConstants.POLLFISH_API_KEY);
             }
 
-            if (networkExtras.containsKey(PollfishExtrasBundleBuilder.POLLFISH_MODE)) {
-                releaseMode = networkExtras.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_MODE, true);
+            if (networkExtras.containsKey(PollfishAdMobAdapterConstants.POLLFISH_MODE)) {
+                releaseMode = networkExtras.getBoolean(PollfishAdMobAdapterConstants.POLLFISH_MODE, true);
             }
 
-            if (networkExtras.containsKey(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID)) {
-                requestUUID = networkExtras.getString(PollfishExtrasBundleBuilder.POLLFISH_REQUEST_UUID);
+            if (networkExtras.containsKey(PollfishAdMobAdapterConstants.POLLFISH_REQUEST_UUID)) {
+                requestUUID = networkExtras.getString(PollfishAdMobAdapterConstants.POLLFISH_REQUEST_UUID);
             }
 
-            if (networkExtras.containsKey(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE)) {
-                offerwallMode = networkExtras.getBoolean(PollfishExtrasBundleBuilder.POLLFISH_INTEGRATION_TYPE, false);
+            if (networkExtras.containsKey(PollfishAdMobAdapterConstants.POLLFISH_INTEGRATION_TYPE)) {
+                offerwallMode = networkExtras.getBoolean(PollfishAdMobAdapterConstants.POLLFISH_INTEGRATION_TYPE, false);
             }
         }
 
         if (TextUtils.isEmpty(pollfishAPIKey)) {
             Log.e(TAG, "Pollfish SDK Failed: Missing Pollfish API Key");
-            mediationAdLoadCallback.onFailure(new AdError(ERROR_CODE_EMPTY_API_KEY, "Missing Pollfish API Key.", DOMAIN));
+            mediationAdLoadCallback.onFailure(
+                    new AdError(
+                            PollfishAdMobAdapterConstants.ERROR_CODE_EMPTY_API_KEY,
+                            "Missing Pollfish API Key.",
+                            DOMAIN));
             return;
         }
 
-        Pollfish.initWith((Activity) getContext(), new Params.Builder(pollfishAPIKey)
+        Params.Builder builder = new Params.Builder(pollfishAPIKey)
                 .releaseMode(releaseMode)
                 .platform(Platform.ADMOB)
-                .requestUUID(requestUUID)
                 .pollfishSurveyReceivedListener(surveyInfo -> mMediationRewardedAdCallback = mediationAdLoadCallback.onSuccess(PollfishAdMobAdapter.this))
-                .pollfishSurveyNotAvailableListener(() -> mediationAdLoadCallback.onFailure(new AdError(ERROR_CODE_NOT_AVAILABLE, "Pollfish Surveys Not Available", DOMAIN)))
+                .pollfishSurveyNotAvailableListener(() -> mediationAdLoadCallback.onFailure(new AdError(PollfishAdMobAdapterConstants.ERROR_CODE_NOT_AVAILABLE, "Pollfish Surveys Not Available", DOMAIN)))
                 .pollfishOpenedListener(() -> {
                     if (mMediationRewardedAdCallback != null) {
                         mMediationRewardedAdCallback.onAdOpened();
@@ -203,14 +201,24 @@ public class PollfishAdMobAdapter extends Adapter implements
                     }
                 })
                 .rewardMode(true)
-                .offerwallMode(offerwallMode)
-                .build());
+                .offerwallMode(offerwallMode);
+
+        if (requestUUID != null) {
+            builder.requestUUID(requestUUID);
+        }
+
+        Pollfish.initWith((Activity) mediationRewardedAdConfiguration.getContext(),
+                builder.build());
     }
 
     @Override
     public void showAd(@NotNull Context context) {
         if (Build.VERSION.SDK_INT < 21) {
-            mMediationRewardedAdCallback.onAdFailedToShow(new AdError(ERROR_CODE_LOW_TARGET, "Pollfish surveys will not run on targets lower than 21", DOMAIN));
+            mMediationRewardedAdCallback.onAdFailedToShow(
+                    new AdError(
+                            PollfishAdMobAdapterConstants.ERROR_CODE_LOW_TARGET,
+                            "Pollfish surveys will not run on targets lower than 21",
+                            DOMAIN));
             return;
         }
 
@@ -234,9 +242,6 @@ public class PollfishAdMobAdapter extends Adapter implements
             int minor = Integer.parseInt(splits[1]);
             int micro = Integer.parseInt(splits[2]) * 100 + Integer.parseInt(splits[3]);
 
-            if (PollfishAdMobAdapterConstants.DEBUGMODE)
-                Log.d(TAG, "getVersionInfo():" + major + " " + minor + " " + micro);
-
             return new VersionInfo(major, minor, micro);
         }
 
@@ -259,8 +264,6 @@ public class PollfishAdMobAdapter extends Adapter implements
             int minor = Integer.parseInt(splits[1]);
             int micro = Integer.parseInt(splits[2]);
 
-            Log.d(TAG, "getSDKVersionInfo():" + major + " " + minor + " " + micro);
-
             return new VersionInfo(major, minor, micro);
         }
 
@@ -268,18 +271,6 @@ public class PollfishAdMobAdapter extends Adapter implements
                 "Returning 0.0.0 for adapter version.", versionString));
 
         return new VersionInfo(0, 0, 0);
-    }
-
-    private void setContext(final Context context) {
-        contextWeakRef = new WeakReference<>(context);
-    }
-
-    private Context getContext() {
-        if (contextWeakRef == null) {
-            return null;
-        }
-
-        return contextWeakRef.get();
     }
 
 }

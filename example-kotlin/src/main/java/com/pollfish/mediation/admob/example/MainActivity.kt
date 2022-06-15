@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
     private fun createAndLoadRewardedAd() {
         binding.rewardedAdBtn.isEnabled = false
 
+        // This step is optional. By setting any of the following properties,
+        // the corresponding property, if set on the AdMob dashboard, will be overwritten.
         val bundle = PollfishExtrasBundleBuilder()
             .setAPIKey(POLLFISH_API_KEY)
             .setReleaseMode(false)
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val request = AdRequest.Builder()
-            .addNetworkExtrasBundle(PollfishAdMobAdapter::class.java, bundle)
+            .addNetworkExtrasBundle(PollfishAdMobAdapter::class.java, bundle) // Optional, this should be used only if you've defined a PollfishExtrasBundleBuilder object.
             .build()
 
         RewardedAd.load(this, AD_MOB_AD_UNIT_KEY, request, object : RewardedAdLoadCallback() {

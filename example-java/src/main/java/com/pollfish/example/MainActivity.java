@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         mRewardedAdButton.setEnabled(false);
 
+        // This step is optional. By setting any of the following properties,
+        // the corresponding property, if set on the AdMob dashboard, will be overwritten.
         Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
                 .setAPIKey(POLLFISH_API_KEY)
                 .setReleaseMode(false)
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         AdRequest request = new AdRequest.Builder()
-                .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle)
+                .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle) // Optional, this should be used only if you've defined a PollfishExtrasBundleBuilder object
                 .build();
 
         RewardedAd.load(this, AD_MOB_AD_UNIT_KEY, request, new RewardedAdLoadCallback() {
