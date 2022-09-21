@@ -2,13 +2,13 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 16
-        targetSdk 32
-        versionCode 24
-        versionName '6.2.5.0'
+        targetSdk 33
+        versionCode 25
+        versionName '6.3.0.0'
     }
 
     buildTypes {
@@ -32,7 +32,7 @@ android {
 
 dependencies {
     api 'com.google.android.gms:play-services-ads:20.6.0'
-    api 'com.pollfish:pollfish-googleplay:6.2.4'
+    api 'com.pollfish:pollfish-googleplay:6.3.0'
 }
 
 apply from: '../publish.gradle'
