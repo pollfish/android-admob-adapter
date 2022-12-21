@@ -23,7 +23,7 @@ Retrieve Pollfish through **maven()** with gradle by adding the following line i
 
 ```groovy
 dependencies {
-  implementation 'com.pollfish.mediation:pollfish-admob:6.3.2.0'
+  implementation 'com.pollfish.mediation:pollfish-admob:6.3.3.0'
 }
 ```
 
