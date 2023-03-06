@@ -6,7 +6,7 @@ public interface PollfishAdMobAdapterConstants {
     /*
      *The adapter versioning scheme for versioned adapters is <third-party SDK version>.<adapter patch version>.
      */
-    String POLLFISH_ADAPTER_VERSION = "6.3.3.0";
+    String POLLFISH_ADAPTER_VERSION = "6.4.0.0";
 
     int ERROR_CODE_NOT_AVAILABLE = 0;
     int ERROR_CODE_LOW_TARGET = 1;
