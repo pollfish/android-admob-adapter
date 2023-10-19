@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SampleProject</string>
+    <string name="app_name">Sample Java</string>
+    <string name="ad_mob_ad_unit_key">MY_AD_UNIT_ID</string>
 </resources>
