@@ -11,19 +11,19 @@ p.each { name, value ->
 }
 
 task prepareGoogleCloudDistDirs {
-    mkdir "$buildDir/tmp/dist/Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}"
+    mkdir "$buildDir/tmp/dist/Prodege Android AdMob Adapter-${rootProject.adapterVersionName}"
 }
 
 task packageGoogleCloudDistribution(type: Zip) {
-    archiveFileName = "Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}.zip"
+    archiveFileName = "Prodege Android AdMob Adapter-${rootProject.adapterVersionName}.zip"
     destinationDirectory = file("$buildDir/dist/public")
 
     from "$buildDir/tmp/dist/"
 }
 
 task copyDistToTempDirectory(type: Copy) {
-    from "$buildDir/outputs/aar/pollfish-admob-${android.defaultConfig.versionName}.aar"
-    into "$buildDir/tmp/dist/Pollfish AdMob Adapter Android-${android.defaultConfig.versionName}"
+    from "$buildDir/outputs/aar/prodege-admob-${rootProject.adapterVersionName}.aar"
+    into "$buildDir/tmp/dist/Prodege Android AdMob Adapter-${rootProject.adapterVersionName}"
 }
 
 task deleteDistTempDirectories(type: Delete) {
@@ -47,16 +47,16 @@ publishing {
         release(MavenPublication) {
 
             groupId "com.pollfish.mediation"
-            artifactId "pollfish-admob"
-            version android.defaultConfig.versionName
+            artifactId "prodege-admob"
+            version rootProject.adapterVersionName
 
-            def filename = "pollfish-admob-${android.defaultConfig.versionName}"
+            def filename = "prodege-admob-${rootProject.adapterVersionName}"
 
             artifact("$buildDir/outputs/aar/${filename}.aar")
 
             pom {
-                name = "pollfish-admob"
-                description = "Adapter for showing Pollfish surveys within mobile apps through AdMob mediation"
+                name = "prodege-admob"
+                description = "Adapter for showing Prodege Ads within mobile apps through AdMob mediation"
                 url = "https://github.com/pollfish/android-admob-adapter"
                 packaging = "aar"
 
@@ -69,8 +69,8 @@ publishing {
 
                 developers {
                     developer {
-                        id = "pollfish"
-                        name = "Pollfish Inc."
+                        id = "prodege"
+                        name = "Prodege, LLC"
                         email = "support@pollfish.com"
                     }
                 }
@@ -89,7 +89,9 @@ publishing {
                         dependencyNode.appendNode('groupId', it.group)
                         dependencyNode.appendNode('artifactId', it.name)
                         dependencyNode.appendNode('version', it.version)
-                        dependencyNode.appendNode('scope', 'compile')
+                        if (it.artifacts.size() > 0) {
+                            dependencyNode.appendNode('type', it.artifacts[0].type)
+                        }
                     }
 
                 }
@@ -114,7 +116,7 @@ signing {
 }
 
 nexusStaging {
-    packageGroup "com.pollfish.mediation"
+    packageGroup "com.prodege.mediation"
     stagingProfileId = nexusStagingProfileId
     username = ossrhUsername
     password = ossrhPassword

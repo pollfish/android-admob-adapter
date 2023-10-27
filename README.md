@@ -1,48 +1,35 @@
-# Pollfish Android AdMob Mediation Adapter
+# Prodege Android AdMob Mediation Adapter
 
-AdMob Mediation Adapter for Android apps looking to load and show Rewarded Surveys from Pollfish in the same waterfall with other Rewarded Ads.
+AdMob Mediation Adapter for Android apps looking to load and show Rewarded ADS from Prodege in the same waterfall with other Rewarded Ads.
 
 > **Note:** A detailed step by step guide is provided on how to integrate can be found [here](https://www.pollfish.com/docs/android-admob-adapter) 
 
-## Step 1: Add Pollfish AdMob Adapter to your project
+## Add Prodege AdMob Adapter to your project
 
-Download the following libraries
-
-* [Pollfish SDK](https://pollfish.com/docs/android/google-play)
-* [PollfishAdMobAdapter](https://pollfish.com/docs/android-admob-adapter)
-
-Import Pollfish AdMob Adapter and Pollfish SDK **.aar** libraries.
-
-If you are using Android Studio, right click on your project and select New Module. Then select Import .JAR or .AAR Package option and from the file browser locate Pollfish AdMob Adapter aar file. Right click again on your project and in the Module Dependencies tab choose to add Pollfish module that you recently added, as a dependency.
-
-**OR**
-
-#### **Retrieve Pollfish AdMob Adapter through maven()**
-
-Retrieve Pollfish through **maven()** with gradle by adding the following line in your project **build.gradle** (not the top level one, the one under 'app') in  dependencies section:  
+Retrieve Prodege AdMob Adapter through **maven()** with gradle by adding the following line in your app's module **build.gradle** file:
 
 ```groovy
 dependencies {
-  implementation 'com.pollfish.mediation:pollfish-admob:6.4.0.0'
+  implementation 'com.pollfish.mediation:prodege-admob:7.0.0-beta01.0'
 }
 ```
 
 <br/>
 
-## Step 2: Request for a RewardedAd
+## Request for a RewardedAd
 
 Import the following packages
 
 <span style="text-decoration:underline">Kotlin</span>
 
 ```kotlin
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 ```
 
 <span style="text-decoration:underline">Java</span>
@@ -57,15 +44,13 @@ import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 ```
 
-<br/>
-
 Initialize AdMob SDK by calling `MobileAds.initialize` method passing a `Context` and an `OnInitializationCompleteListener` listener as arguments.
 
 <span style="text-decoration:underline">Kotlin</span>
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
-    ...
+    // ...
 
     MobileAds.initialize(this) {
         // Initialization completed
@@ -79,7 +64,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
-    ...
+    // ...
 
     MobileAds.initialize(this, initializationStatus -> {
         // Initialization completed
@@ -97,7 +82,6 @@ val adRequest = AdRequest.Builder().build()
 
 RewardedAd.load(this, "AD_UNIT_KEY", adRequest, object : RewardedAdLoadCallback() {
     override fun onAdLoaded(rewardedAd: RewardedAd) {
-        
         rewardedAd.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {}
 
@@ -134,7 +118,6 @@ RewardedAd.load(this, "AD_UNIT_KEY", request, new RewardedAdLoadCallback() {
 
     @Override
     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {}
-
 });
 ```
 
@@ -160,90 +143,223 @@ if (mRewardedAd != null) {
 
 <br/>
 
-## Step 3: Configure Pollfish AdMob Adapter in your Rewarded Ad Unit 
+## Configure the Prodege SDK programmatically
 
-Pollfish AdMob Adapter provides different options that you can use to control the behaviour of Pollfish SDK. This configuration, if applied, will override any configuration done in AdMob's dashboard.
+Prodege AdMob Adapter provides different options that you can use to control the behaviour of Prodege SDK. Any configuration, if applied, will override any configuration done in AdMob's dashboard.
+
+### **Initialization configuration**
+
+Below you can see all the availbale options for configuring Prodege SDK prior to the AdMob SDK initialization.
+
+### `.setUserId(String)`
+
+An optional id used to identify a user.
+
+Setting the Prodege's `userId` will override the default behaviour and use that instead of the Advertising Id in order to identify a user.
+
+> **Note:** <span style="color: red">You can pass the id of a user as identified on your system. Prodege will use this id to identify the user across sessions instead of an ad id/idfa as advised by the stores. You are solely responsible for aligning with store regulations by providing this id and getting relevant consent by the user when necessary. Prodege takes no responsibility for the usage of this id. In any request from your users on resetting/deleting this id and/or profile created, you should be solely liable for those requests.</span>
+d
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+ProdegeAdMobAdapter.setUserId("MY_USER_ID")
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+ProdegeAdMobAdapter.setUserId("MY_USER_ID");
+```
 
 <br/>
 
-Below you can see all the available options of **PollfishExtrasBundleBuilder** instance that is used to configure the behaviour of Pollfish SDK.
+### `.setTestMode(Boolean)`
 
-<br/>
+Toggles the Prodege SDK Test mode.
 
-No | Description
------------- | -------------
-3.1 | **`.setAPIKey(String apiKey)`**  <br/> Sets Pollfish SDK API key as provided by Pollfish
-3.2 | **`.setRequestUUID(String requestUUID)`**  <br/> Sets a unique id to identify a user and be passed through server-to-server callbacks
-3.3 | **`.setReleaseMode(boolean releaseMode)`**  <br/> Sets Pollfish SDK to Developer or Release mode
-3.4 | **`.setOfferwallMode(boolean offerwallMode)`** <br/> Sets Pollfish SDK to Offerwall Mode
+- **`true`** is used to show to the developer how Prodege ads will be shown through an app (useful during development and testing).
+- **`false`** is the mode to be used for a released app in any app store (start receiving paid surveys).
 
-#### 2.1 .setAPIKey(String apiKey)
+If you have already specified a placement id on AdMob's UI, this will override the one defined on Web UI.
 
-Pollfish API Key as provided by Pollfish on  [Pollfish Dashboard](https://www.pollfish.com/publisher/) after you sign up to the platform.  If you have already specified Pollfish API Key on AdMob's UI, this param will be ignored.
-
-#### 2.2 .setRequestUUID(String requestUUID)
-
-Sets a unique id to identify a user and be passed through server-to-server callbacks on survey completion. 
-
-In order to register for such callbacks you can set up your server URL on your app's page on Pollfish Developer Dashboard and then pass your requestUUID through ParamsBuilder object during initialization. On each survey completion you will receive a callback to your server including the requestUUID param passed.
-
-If you would like to read more on Pollfish s2s callbacks you can read the documentation [here](https://www.pollfish.com/docs/s2s)
-
-#### 2.3 .setReleaseMode(boolean releaseMode)
-
-Sets Pollfish SDK to Developer or Release mode.
-
-*   **Developer mode** is used to show to the developer how Pollfish surveys will be shown through an app (useful during development and testing).
-*   **Release mode** is the mode to be used for a released app in any app store (start receiving paid surveys).
-
-Pollfish AdMob Adapter runs Pollfish SDK in release mode by default. If you would like to test with Test survey, you should set release mode to fasle.
+Prodege AdMob Adapter works by default in live mode. If you would like to test with test ads:
 
 <span style="text-decoration:underline">Kotlin</span>
 
 ```kotlin
-val bundle = PollfishExtrasBundleBuilder()
-    .setAPIKey(POLLFISH_API_KEY)
-    .setReleaseMode(false)
-    .setRequestUUID("MY_UUID")
-    .setOfferwallMode(false)
-    .build()
+ProdegeAdMobAdapter.setTestMode(true)
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+ProdegeAdMobAdapter.setTestMode(true);
+```
+
+<br/>
+
+### `.setApiKey(String)`
+
+Your application's API key as provided by the [Publisher Dashboard](https://www.pollfish.com/publisher/).
+
+If you have already specified a placement id on AdMob's UI, this will override the one defined on Web UI.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+ProdegeAdMobAdapter.setApiKey("PRODEGE_API_KEY")
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+ProdegeAdMobAdapter.setApiKey("PRODEGE_API_KEY");
+```
+
+<br/>
+
+After configuring the Prodege Max Adapter you can proceed with the AdMob SDK initialization.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+MobileAds.initialize(this) {
+    // ...
+}
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+MobileAds.initialize(this, initializationStatus -> {
+    // ...
+});
+```
+
+<br/>
+
+### **Ad Request configuration**
+
+Below you can see all the availbale options of `ProdegeNetworkExtras.Builder` for configuring your Prodege placement loaded by the `AdRequest`.
+
+Start by creating a `ProdegeNetworkExtras.Builder` instance. You can later build upon this instnace based on you preffered configuration.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+val builder = ProdegeNetworkExtras.Builder()
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+ProdegeNetworkExtras.Builder builder = new ProdegeNetworkExtras.Builder();
+```
+
+<br/>
+
+### `.placementId(String)`
+
+Your ad unit's placement id as provided by [Publisher Dashboard](https://www.pollfish.com/publisher/).
+
+If you have already specified a placement id on AdMob's UI, this param will override the one defined on Web UI.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+builder.placementId("PLACEMENT_ID")
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+builder.placementId("PLACEMENT_ID");
+```
+
+<br/>
+
+### `.requestUuid(String)`
+
+Sets a pass-through param to be received via the server-to-server callbacks.
+
+In order to register for such callbacks you can set up your server URL on your app's page on the [Publisher Dashboard](https://www.pollfish.com/publisher/). On each survey completion you will receive a callback to your server including the `request_uuid` param passed.
+
+If you would like to read more on Prodege s2s callbacks you can read the documentation [here](https://www.pollfish.com/docs/s2s)
+
+If you have already specified a placement id on AdMob's UI, this param will override the one defined on Web UI.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+builder.requestUuid("MY_REQUEST_UUID")
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+builder.requestUuid("MY_REQUEST_UUID");
+```
+
+<br/>
+
+### `.muted(Boolean)`
+
+Sets Prodege video ads mute state.
+
+If you would like to read more on Prodege s2s callbacks you can read the documentation [here](https://www.pollfish.com/docs/s2s).
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+builder.muted(true)
+```
+
+<span style="text-decoration:underline">Java</span>
+
+```java
+builder.muted(true);
+```
+
+<br/>
+
+Finally, build the `ProdegeNetworkExtras` instance, by calling `builder.build()` method on the `ProdegeNetworkExtras.Builder` instance.
+
+<span style="text-decoration:underline">Kotlin</span>
+
+```kotlin
+val networkExtras = builder.build()
 
 val request = AdRequest.Builder()
-    .addNetworkExtrasBundle(PollfishAdMobAdapter::class.java, bundle)
+    .addNetworkExtrasBundle(ProdegeAdMobAdapter::class.java, networkExtras)
     .build()
 ```
 
 <span style="text-decoration:underline">Java</span>
 
 ```java
-Bundle pollfishBundle = new PollfishExtrasBundleBuilder()
-    .setAPIKey("YOUR_POLLFISH_API_KEY")
-    .setReleaseMode(false)
-    .setRequestUUID("MY_ID")
-    .setOfferwallMode(false)
-    .build();
+Bundle networkExtras = builder.build();
 
 AdRequest request = new AdRequest.Builder()
-    .addNetworkExtrasBundle(PollfishAdMobAdapter.class, pollfishBundle)
+    .addNetworkExtrasBundle(ProdegeAdMobAdapter.class, networkExtras)
     .build();
 ```
 
 <br/>
 
-### Step 3: Publish 
+### Publish 
 
-If you everything worked fine during the previous steps, you should turn Pollfish to release mode and publish your app.
+If everything worked fine during the previous steps, you are ready to proceed with publishing your app.
 
-> **Note:** After you take your app live, you should request your account to get verified through Pollfish Dashboard in the App Settings area.
+> **Note:** After you take your app live, you should request your account to get verified through Prodege Dashboard in the App Settings area.
 
-> **Note:** There is an option to show **Standalone Demographic Questions** needed for Pollfish to target users with surveys even when no actually surveys are available. Those surveys do not deliver any revenue to the publisher (but they can increase fill rate) and therefore if you do not want to show such surveys in the Waterfall you should visit your **App Settings** are and disable that option.
+> **Note:** There is an option to show **Standalone Demographic Questions** needed for Prodege to target users with surveys even when no actually surveys are available. Those surveys do not deliver any revenue to the publisher (but they can increase fill rate) and therefore if you do not want to show such surveys in the Waterfall you should visit your **App Settings** are and disable that option. You can read more [here](https://www.pollfish.com/docs/demographic-surveys)
 
 <br/>
 
 # More info
 
-You can read more info on how the Pollfish SDKs work or how to get started with Google AdMob at the following links:
+You can read more info on how the Prodege SDKs work or how to get started with Google AdMob at the following links:
 
-[Pollfish Android SDK](https://pollfish.com/docs/android/google-play)
+[Prodege Android SDK](https://pollfish.com/docs/android/google-play)
 
 [AdMob Android SDK](https://developers.google.com/admob/android/quick-start)

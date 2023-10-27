@@ -1,6 +1,0 @@
-<manifest xmlns:tools="http://schemas.android.com/tools"
-    package="com.pollfish.mediation">
-
-    <uses-sdk tools:overrideLibrary="com.pollfish" />
-
-</manifest>

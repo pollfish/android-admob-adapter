@@ -1,3 +1,5 @@
-include ':example-java', ':pollfish-admob'
 rootProject.name='android-admob-adapter'
+
+include ':prodege-admob'
+include ':example-java'
 include ':example-kotlin'

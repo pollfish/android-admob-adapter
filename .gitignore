@@ -97,3 +97,4 @@ keys/
 /.idea/jarRepositories.xml
 /.idea/misc.xml
 /.idea/codeStyles/Project.xml
+/.idea/kotlinc.xml

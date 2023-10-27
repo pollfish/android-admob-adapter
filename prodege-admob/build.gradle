@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 16
+        targetSdk 34
+
+        buildConfigField 'String', 'ADAPTER_VERSION', "\"${rootProject.adapterVersionName}\""
+        buildConfigField 'String', 'PRODEGE_SDK_VERSION', "\"${rootProject.prodegeSdkVersion}\""
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace 'com.prodege.mediation'
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${archivesBaseName}-${rootProject.adapterVersionName}.aar"
+        }
+    }
+
+}
+
+dependencies {
+    implementation "com.google.android.gms:play-services-ads:${rootProject.adMobSdkVersion}"
+    implementation "com.pollfish:prodege:${rootProject.prodegeSdkVersion}"
+}
+
+apply from: '../publish.gradle'
