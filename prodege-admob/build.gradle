@@ -34,7 +34,7 @@ android {
 
 dependencies {
     implementation "com.google.android.gms:play-services-ads:${rootProject.adMobSdkVersion}"
-    implementation "com.pollfish:prodege:${rootProject.prodegeSdkVersion}"
+    implementation "com.prodege:prodege:${rootProject.prodegeSdkVersion}"
 }
 
 apply from: '../publish.gradle'
