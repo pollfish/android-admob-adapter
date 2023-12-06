@@ -10,7 +10,7 @@ Retrieve Prodege AdMob Adapter through **maven()** with gradle by adding the fol
 
 ```groovy
 dependencies {
-  implementation 'com.prodege.mediation:prodege-admob:7.0.0-beta03.0'
+  implementation 'com.prodege.mediation:prodege-admob:7.0.0-beta04.0'
 }
 ```
 
