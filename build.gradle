@@ -20,8 +20,8 @@ buildscript {
 }
 
 ext {
-    prodegeSdkVersion = "7.0.0-beta04"
-    adapterVersionCode = 32
+    prodegeSdkVersion = "7.0.0-beta05"
+    adapterVersionCode = 33
     adapterVersionName = "${prodegeSdkVersion}.0"
     adMobSdkVersion = "22.5.0"
 }
